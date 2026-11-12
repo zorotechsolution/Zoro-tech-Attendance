@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Admin · AttendPro</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect width=%2724%27 height=%2724%27 rx=%276%27 fill=%27%232563eb%27/%3E%3Ccircle cx=%2712%27 cy=%2712%27 r=%276%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27/%3E%3Cpath d=%27M12 9v3l2 1%27 stroke=%27white%27 stroke-width=%272%27 fill=%27none%27/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <div class="sidebar__brand"><span class="brand-mark" data-icon="logo"></span><span data-app-name>AttendPro</span></div>
+      <div class="sidebar__role">Admin panel</div>
+      <nav class="nav">
+        <a class="nav__item" href="#dashboard" data-nav="dashboard"><span data-icon="dashboard"></span>Dashboard</a>
+        <a class="nav__item" href="#employees" data-nav="employees"><span data-icon="users"></span>Employees</a>
+        <a class="nav__item" href="#attendance" data-nav="attendance"><span data-icon="calendar"></span>Attendance</a>
+        <a class="nav__item" href="#permissions" data-nav="permissions"><span data-icon="clock"></span>Permissions</a>
+        <a class="nav__item" href="#excess" data-nav="excess"><span data-icon="alert"></span>Excess &amp; deductions<span class="nav__badge" id="excessBadge" hidden>0</span></a>
+        <a class="nav__item" href="#reports" data-nav="reports"><span data-icon="report"></span>Reports</a>
+      </nav>
+      <div class="sidebar__foot">
+        <div class="userchip"><span class="avatar" id="meAvatar"></span>
+          <div class="userchip__meta"><div class="userchip__name" id="meName"></div><div class="userchip__sub" id="meEmail"></div></div></div>
+        <button class="btn btn--sidebar btn--sm" id="pwBtn" style="margin-bottom:8px" type="button"><span data-icon="key"></span>Change password</button>
+        <button class="btn btn--sidebar btn--sm" id="logoutBtn" type="button"><span data-icon="logout"></span>Sign out</button>
+      </div>
+    </aside>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Open menu"><span data-icon="menu"></span></button>
+        <div class="topbar__title" id="topbarTitle">Dashboard</div>
+        <div class="topbar__spacer"></div>
+        <div class="topbar__clock"><strong id="clockTime"></strong><span id="clockDate"></span></div>
+      </header>
+
+      <main class="content">
+        <!-- ============ DASHBOARD ============ -->
+        <section class="view" data-view="dashboard">
+          <div class="page-head"><div><h1>Dashboard</h1><p id="dashSub"></p></div></div>
+          <div class="grid grid--stats" id="dashStats"></div>
+          <div class="grid grid--main">
+            <div class="card">
+              <div class="card__head"><div><h2>Attendance · last 7 working days</h2><p>Check-ins by day</p></div></div>
+              <div class="card__body" id="dashChart"></div>
+            </div>
+            <div class="card">
+              <div class="card__head"><div><h2>Permission usage</h2><p id="dashPermSub"></p></div></div>
+              <div class="card__body" id="dashPerm"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__head"><div><h2>Today at a glance</h2><p id="dashTodaySub"></p></div><a class="btn btn--ghost btn--sm" href="#attendance">View all attendance</a></div>
+            <div class="card__body card__body--flush" id="dashToday"></div>
+          </div>
+        </section>
+
+        <!-- ============ EMPLOYEES ============ -->
+        <section class="view" data-view="employees" hidden>
+          <div class="page-head">
+            <div><h1>Employees</h1><p id="empSub"></p></div>
+            <div class="page-head__actions"><button class="btn btn--primary" id="addEmpBtn" type="button"><span data-icon="plus"></span>Add employee</button></div>
+          </div>
+          <div class="card"><div class="card__body card__body--flush" id="empTable"></div></div>
+        </section>
+
+        <!-- ============ ATTENDANCE ============ -->
+        <section class="view" data-view="attendance" hidden>
+          <div class="page-head">
+            <div><h1>Attendance</h1><p>Check-in and check-out records for every employee.</p></div>
+            <div class="page-head__actions"><button class="btn btn--ghost" id="attExport" type="button"><span data-icon="download"></span>Export CSV</button></div>
+          </div>
+          <div class="card">
+            <div class="card__head">
+              <div class="toolbar">
+                <select class="input" id="attEmp" aria-label="Employee"></select>
+                <label class="sr-only" for="attFrom">From</label><input class="input" type="date" id="attFrom">
+                <label class="sr-only" for="attTo">To</label><input class="input" type="date" id="attTo">
+              </div>
+            </div>
+            <div class="card__body card__body--flush" id="attTable"></div>
+          </div>
+        </section>
+
+        <!-- ============ PERMISSIONS ============ -->
+        <section class="view" data-view="permissions" hidden>
+          <div class="page-head">
+            <div><h1>Permission records</h1><p id="permSub"></p></div>
+            <div class="page-head__actions"><button class="btn btn--ghost" id="permExport" type="button"><span data-icon="download"></span>Export CSV</button></div>
+          </div>
+          <div class="card">
+            <div class="card__head">
+              <div class="toolbar">
+                <input class="input" type="month" id="permMonth" aria-label="Month">
+                <select class="input" id="permEmp" aria-label="Employee"></select>
+              </div>
+            </div>
+            <div class="card__body card__body--flush" id="permTable"></div>
+          </div>
+        </section>
+
+        <!-- ============ EXCESS & DEDUCTIONS ============ -->
+        <section class="view" data-view="excess" hidden>
+          <div class="page-head">
+            <div><h1>Excess permission &amp; deductions</h1><p id="excessSub"></p></div>
+            <div class="page-head__actions"><input class="input" type="month" id="excessMonth" aria-label="Month"></div>
+          </div>
+          <div class="notice notice--info mb-2">
+            <span data-icon="info"></span>
+            <div>Only minutes beyond the monthly allowance count as excess. <strong>No half-day is ever deducted automatically</strong>; every deduction below needs your explicit approval.</div>
+          </div>
+          <div class="card"><div class="card__body card__body--flush" id="excessTable"></div></div>
+        </section>
+
+        <!-- ============ REPORTS ============ -->
+        <section class="view" data-view="reports" hidden>
+          <div class="page-head">
+            <div><h1>Reports</h1><p>Daily and monthly summaries. Export or print for payroll.</p></div>
+            <div class="page-head__actions">
+              <div class="seg" role="tablist" aria-label="Report type">
+                <button type="button" role="tab" data-report="daily" class="is-active">Daily</button>
+                <button type="button" role="tab" data-report="monthly">Monthly</button>
+              </div>
+              <button class="btn btn--ghost" id="repExport" type="button"><span data-icon="download"></span>CSV</button>
+              <button class="btn btn--ghost" id="repPrint" type="button"><span data-icon="print"></span>Print</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__head">
+              <div class="toolbar">
+                <input class="input" type="date" id="repDate" aria-label="Date">
+                <input class="input" type="month" id="repMonth" aria-label="Month" hidden>
+              </div>
+              <h2 id="repTitle"></h2>
+            </div>
+            <div class="card__body card__body--flush" id="repTable"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/rules.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>My workspace · AttendPro</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect width=%2724%27 height=%2724%27 rx=%276%27 fill=%27%232563eb%27/%3E%3Ccircle cx=%2712%27 cy=%2712%27 r=%276%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27/%3E%3Cpath d=%27M12 9v3l2 1%27 stroke=%27white%27 stroke-width=%272%27 fill=%27none%27/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <div class="sidebar__brand"><span class="brand-mark" data-icon="logo"></span><span data-app-name>AttendPro</span></div>
+      <div class="sidebar__role">Employee</div>
+      <nav class="nav">
+        <a class="nav__item" href="#today" data-nav="today"><span data-icon="dashboard"></span>Today</a>
+        <a class="nav__item" href="#history" data-nav="history"><span data-icon="history"></span>Attendance history</a>
+        <a class="nav__item" href="#permission" data-nav="permission"><span data-icon="clock"></span>Permission</a>
+      </nav>
+      <div class="sidebar__foot">
+        <div class="userchip"><span class="avatar" id="meAvatar"></span>
+          <div class="userchip__meta"><div class="userchip__name" id="meName"></div><div class="userchip__sub" id="meSub"></div></div></div>
+        <button class="btn btn--sidebar btn--sm" id="pwBtn" style="margin-bottom:8px" type="button"><span data-icon="key"></span>Change password</button>
+        <button class="btn btn--sidebar btn--sm" id="logoutBtn" type="button"><span data-icon="logout"></span>Sign out</button>
+      </div>
+    </aside>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Open menu"><span data-icon="menu"></span></button>
+        <div class="topbar__title" id="topbarTitle">Today</div>
+        <div class="topbar__spacer"></div>
+        <div class="topbar__clock"><strong id="clockTime"></strong><span id="clockDate"></span></div>
+      </header>
+
+      <main class="content">
+        <!-- ============ TODAY ============ -->
+        <section class="view" data-view="today">
+          <div class="hero" id="hero"></div>
+          <div class="grid grid--stats mt-2" id="todayStats"></div>
+          <div class="grid grid--main">
+            <div class="card">
+              <div class="card__head"><div><h2>Recent attendance</h2><p>Your last few working days</p></div><a class="btn btn--ghost btn--sm" href="#history">Full history</a></div>
+              <div class="card__body card__body--flush" id="todayRecent"></div>
+            </div>
+            <div class="card">
+              <div class="card__head"><div><h2>Permission balance</h2><p id="todayPermSub"></p></div></div>
+              <div class="card__body" id="todayPerm"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ HISTORY ============ -->
+        <section class="view" data-view="history" hidden>
+          <div class="page-head">
+            <div><h1>Attendance history</h1><p>Every working day, including days with no check-in.</p></div>
+            <div class="page-head__actions"><input class="input" type="month" id="histMonth" aria-label="Month"></div>
+          </div>
+          <div class="grid grid--stats" id="histStats"></div>
+          <div class="card"><div class="card__body card__body--flush" id="histTable"></div></div>
+        </section>
+
+        <!-- ============ PERMISSION ============ -->
+        <section class="view" data-view="permission" hidden>
+          <div class="page-head">
+            <div><h1>Permission</h1><p id="permIntro"></p></div>
+            <div class="page-head__actions"><input class="input" type="month" id="permMonth" aria-label="Month"></div>
+          </div>
+          <div class="grid grid--main">
+            <div class="grid" style="align-content:start">
+              <div class="card">
+                <div class="card__head"><div><h2>Record permission</h2><p>Recorded directly. No approval needed.</p></div></div>
+                <form class="card__body" id="permForm" novalidate>
+                  <div class="form-error" id="permError" role="alert" hidden></div>
+                  <div class="form-grid">
+                    <div class="field"><label for="pDate">Date</label><input class="input" type="date" id="pDate" name="date" required></div>
+                    <div class="field"><label for="pReason">Reason (optional)</label><input class="input" id="pReason" name="reason" maxlength="200" placeholder="e.g. Bank work"></div>
+                    <div class="field"><label for="pStart">From</label><input class="input" type="time" id="pStart" name="start" step="300" required></div>
+                    <div class="field"><label for="pEnd">To</label><input class="input" type="time" id="pEnd" name="end" step="300" required></div>
+                  </div>
+                  <div class="notice notice--info" id="permPreview" aria-live="polite"></div>
+                  <button class="btn btn--primary mt-2" type="submit" id="permSubmit"><span data-icon="check"></span>Record permission</button>
+                </form>
+              </div>
+              <div class="card">
+                <div class="card__head"><div><h2>My permission records</h2><p id="permListSub"></p></div></div>
+                <div class="card__body card__body--flush" id="permList"></div>
+              </div>
+            </div>
+            <div class="grid" style="align-content:start">
+              <div class="card">
+                <div class="card__head"><div><h2>Monthly balance</h2><p id="permBalSub"></p></div></div>
+                <div class="card__body" id="permBalance"></div>
+              </div>
+              <div class="card" id="excessCard" hidden>
+                <div class="card__head"><div><h2>Excess permission</h2><p>Minutes beyond your allowance</p></div></div>
+                <div class="card__body" id="excessBody"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/rules.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/employee.js"></script>
+</body>
+</html>

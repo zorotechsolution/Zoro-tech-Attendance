@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Sign in · AttendPro</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Crect width=%2724%27 height=%2724%27 rx=%276%27 fill=%27%232563eb%27/%3E%3Ccircle cx=%2712%27 cy=%2712%27 r=%276%27 fill=%27none%27 stroke=%27white%27 stroke-width=%272%27/%3E%3Cpath d=%27M12 9v3l2 1%27 stroke=%27white%27 stroke-width=%272%27 fill=%27none%27/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <div class="auth">
+    <aside class="auth__aside" aria-hidden="true">
+      <div class="sidebar__brand" style="padding:0">
+        <span class="brand-mark" id="brandIcon"></span><span id="brandName">AttendPro</span>
+      </div>
+      <div>
+        <h1>Attendance, simplified for small teams.</h1>
+        <p>Check-ins, monthly permission balance and excess tracking, all in one clean workspace.</p>
+        <div class="auth__points">
+          <div><span data-icon="clock"></span>Mon–Sat · 9:30 AM – 5:30 PM IST</div>
+          <div><span data-icon="timer"></span>150 minutes of permission every month</div>
+          <div><span data-icon="shield"></span>Half-day deductions are always an admin decision</div>
+        </div>
+      </div>
+      <small>© <span id="year"></span> <span id="companyName"></span></small>
+    </aside>
+
+    <main class="auth__panel">
+      <div class="auth__box">
+        <!-- Sign-in form -->
+        <form id="loginForm" novalidate hidden>
+          <h2>Welcome back</h2>
+          <p class="lead">Sign in to continue to your dashboard.</p>
+          <div class="form-error" id="loginError" role="alert" hidden></div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input class="input" id="email" name="email" type="email" autocomplete="username" required placeholder="you@company.com">
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="pw-wrap">
+              <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+              <button type="button" class="pw-toggle" data-pw-toggle>Show</button>
+            </div>
+          </div>
+          <button class="btn btn--primary btn--lg btn--block" type="submit" id="loginBtn">Sign in</button>
+          <p class="muted mt-2" style="font-size:.84rem">Forgot your password? Ask your admin to reset it.</p>
+        </form>
+
+        <!-- First-run admin setup (shown only when no admin exists yet) -->
+        <form id="setupForm" novalidate hidden>
+          <h2>Set up your workspace</h2>
+          <p class="lead">Create the admin account. This appears only once, on first use.</p>
+          <div class="form-error" id="setupError" role="alert" hidden></div>
+          <div class="field"><label for="sName">Your name</label><input class="input" id="sName" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="sEmail">Admin email</label><input class="input" id="sEmail" name="email" type="email" autocomplete="username" required></div>
+          <div class="field">
+            <label for="sPw">Password</label>
+            <div class="pw-wrap">
+              <input class="input" id="sPw" name="password" type="password" autocomplete="new-password" required>
+              <button type="button" class="pw-toggle" data-pw-toggle>Show</button>
+            </div>
+            <span class="hint" id="pwHint"></span>
+          </div>
+          <div class="field"><label for="sPw2">Confirm password</label><input class="input" id="sPw2" name="confirm" type="password" autocomplete="new-password" required></div>
+          <button class="btn btn--primary btn--lg btn--block" type="submit" id="setupBtn">Create admin account</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/rules.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>
